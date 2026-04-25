@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>USCP Exam 3 Hard Practice Test</title>
+<style>
+  body{font-family:Arial, sans-serif;background:#0f1115;color:#e8e8e8;margin:0;padding:20px}
+  .wrap{max-width:1000px;margin:auto}
+  h1{margin-bottom:5px}
+  .note{color:#aaa;margin-bottom:25px}
+  .q{background:#1b1f2a;border:1px solid #2f3545;border-radius:10px;padding:16px;margin:18px 0}
+  .q h3{margin-top:0;font-size:17px}
+  label{display:block;padding:8px;margin:6px 0;background:#252b38;border-radius:6px;cursor:pointer}
+  label:hover{background:#30384a}
+  button{background:#4f7cff;color:white;border:0;border-radius:8px;padding:12px 18px;font-size:16px;cursor:pointer;margin:20px 0}
+  .result{font-size:20px;font-weight:bold;margin:20px 0}
+  .explain{margin-top:10px;padding:10px;border-radius:6px;display:none}
+  .correct{background:#123d24;color:#9dffb7}
+  .wrong{background:#4a1d1d;color:#ffb0b0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>USCP Exam 3 — Hard Version</h1>
+<p class="note">50 questions. Traffic-heavy. Choose the best answer, then submit.</p>
+
+<form id="quiz"></form>
+<button onclick="gradeQuiz()" type="button">Submit Test</button>
+<div id="score" class="result"></div>
+
+<script>
+const questions = [
+{
+q:"An officer stops a driver on Capitol Grounds. The driver has a valid Maryland license, but dispatch returns “No DC Status.” The original stop was for running a stop sign. What is the best enforcement action?",
+a:["Summary arrest for No Valid Permit","NOI for the original stop-sign violation only","Arrest for Operating After Suspension","Release with no enforcement action"],
+c:1,
+e:"No DC Status simply means DC has no record. If the out-of-state permit is valid, issue the NOI for the original violation."
+},
+{
+q:"A driver produces an out-of-state license expired 65 days ago. The driver says they forgot to renew it. What is the correct action?",
+a:["Summary arrest for No Valid Permit","NOI; advise they cannot legally operate in DC","No action if identity is confirmed","Arrest only if the vehicle is also unregistered"],
+c:1,
+e:"Expired 90 days or less is handled by NOI, not summary arrest."
+},
+{
+q:"A driver’s DC driving privilege is suspended, but they show a valid Maryland license. What is the proper action?",
+a:["NOI for Failure to Exhibit Permit","Summary arrest for Operating After Suspension","Allow them to leave because Maryland is valid","NOI only if the original violation was hazardous"],
+c:1,
+e:"If their status in DC is suspended, it is Operating After Suspension and requires summary arrest."
+},
+{
+q:"A person is sitting behind the wheel with the engine running in a legally parked vehicle. Under permit regulations, this is best described as:",
+a:["Not operating because the vehicle is parked","Operating because they are in physical control","Only operating if the vehicle moves","Operating only if the vehicle is on a public roadway"],
+c:1,
+e:"Operating includes sitting behind the wheel with the engine running."
+},
+{
+q:"A 16-year-old learner’s permit holder is driving at 2030 hours with a licensed 22-year-old instructor seated beside them. They run a red light. What is the best charge?",
+a:["No Valid Permit and red light violation","Learner’s permit violation only","Red light violation only","Summary arrest because learner permits cannot operate after 1800"],
+c:2,
+e:"A learner may drive between 0600-2100 with a licensed driver at least 21 beside them. The issue is the red light."
+},
+{
+q:"A learner’s permit holder drives alone at 1400 hours. Which is most accurate?",
+a:["This constitutes No Valid Permit","This is a learner permit violation, not No Valid Permit","This is legal if the permit is current","This is only enforceable if a crash occurs"],
+c:1,
+e:"Violation of learner restrictions does not constitute No Valid Permit."
+},
+{
+q:"A driver has BAC .04. They have slurred speech, odor of alcohol, and poor coordination. What is most accurate?",
+a:["No alcohol offense because BAC is under .05","DUI may be supported if impairment is proven","DWI applies automatically","Only OWI can be charged by the officer"],
+c:1,
+e:"At .01-.04, DUI requires proof of impairment."
+},
+{
+q:"A driver has BAC .08 but appears coordinated and speaks clearly. What charge is supported?",
+a:["No charge without visible impairment","DWI because .08 or above is intoxicated per se","DUI only because impairment must be visible","OWI only"],
+c:1,
+e:"DWI applies at .08 or above regardless of visible impairment."
+},
+{
+q:"A 20-year-old driver has any measurable amount of alcohol in breath, blood, or urine. The correct charge is:",
+a:["DUI only if impairment is proven","DWI","OWI by officer discretion","No charge unless BAC is .08 or higher"],
+c:1,
+e:"Anyone under 21 is DWI with any measurable alcohol."
+},
+{
+q:"During a DUI investigation, which phase includes HGN, Walk-and-Turn, and One-Leg Stand?",
+a:["Vehicle in motion","Personal contact","Pre-arrest screening","Chemical testing"],
+c:2,
+e:"SFSTs are part of pre-arrest screening."
+},
+{
+q:"A driver refuses Standardized Field Sobriety Tests. Which is true?",
+a:["Refusal creates automatic DWI","Operators may refuse SFSTs","Refusal eliminates probable cause","Officer must release the driver"],
+c:1,
+e:"Operators may refuse to participate in SFSTs."
+},
+{
+q:"Implied consent in DC means:",
+a:["The driver agreed to SFSTs by driving","The driver is deemed to consent to chemical testing","The driver cannot refuse any police request","The driver waived Miranda for DUI questioning"],
+c:1,
+e:"Implied consent applies to chemical tests for alcohol/drugs."
+},
+{
+q:"A vehicle has no current registration on file and has never been registered to that owner. The operator did not use false information. What is generally correct?",
+a:["Arrest for unregistered vehicle","NOI for unregistered vehicle","No enforcement if insurance is valid","Only tow, no citation"],
+c:1,
+e:"The arrest trigger involves false/fictitious information or fraudulent temporary tags."
+},
+{
+q:"A vehicle is currently registered but has no current sticker displayed. Best charge?",
+a:["Operating Unregistered Vehicle","Failure to Display Current Tags","Spurious Tags","Dead Tags"],
+c:1,
+e:"Current registration not displayed is Failure to Display Current Tags."
+},
+{
+q:"A new owner fails to register the vehicle after title changes over. This is best described as:",
+a:["Dead tags","Spurious tags","Failure to exhibit registration","Counterfeit tags"],
+c:0,
+e:"Dead tags involve failure to register after title has changed."
+},
+{
+q:"Hand-made tags altered to resemble valid tags are:",
+a:["Dead tags","Spurious tags","Temporary tags","Vanity tags"],
+c:1,
+e:"Spurious tags are altered or handmade tags resembling valid tags."
+},
+{
+q:"An officer sees one headlight out during daylight and the vehicle is otherwise safe. Best action?",
+a:["Tow as unsafe vehicle","NOI for the specific equipment violation and send on way","Arrest operator","Impound vehicle automatically"],
+c:1,
+e:"Minor equipment violations get an NOI; unsafe vehicles are removed only when danger exists."
+},
+{
+q:"A vehicle has no operable lights at night. Best action?",
+a:["Warning only","NOI and remove from roadway by tow","Allow driver to use hazard lights","Only cite if a crash occurs"],
+c:1,
+e:"A vehicle unsafe to operate should receive NOI and be removed from the roadway."
+},
+{
+q:"A DC vehicle must display:",
+a:["One rear tag only","Two tags and inspection sticker on passenger side","Two tags and no inspection sticker","One front tag and rear inspection sticker"],
+c:1,
+e:"DC vehicles require front and rear tags; inspection sticker is on passenger side."
+},
+{
+q:"A Virginia vehicle’s inspection sticker is generally located:",
+a:["Passenger side windshield","Bottom left corner windshield","Rear tag only","Driver door decal"],
+c:1,
+e:"Virginia inspection sticker is bottom left corner of windshield."
+},
+{
+q:"A VIN normally has how many characters?",
+a:["15","16","17","18"],
+c:2,
+e:"VINs are 17 characters."
+},
+{
+q:"Which letters are not used in a VIN?",
+a:["I, O, Q","A, E, U","L, M, N","X, Y, Z"],
+c:0,
+e:"VINs do not use I, O, or Q."
+},
+{
+q:"The 10th character of a VIN identifies:",
+a:["Country","Manufacturer","Year","Check digit"],
+c:2,
+e:"The 10th VIN character identifies the year."
+},
+{
+q:"A TIMP officer sees a heavily weighted-down commercial van approaching the checkpoint. Even before confirming weight, it may be treated as:",
+a:["Authorized vehicle","Vehicle of Interest","Condition Red automatically","Public transit vehicle"],
+c:1,
+e:"A heavily weighted-down or visually suspicious vehicle may be a Vehicle of Interest."
+},
+{
+q:"A commercial vehicle exceeding 1.25 tons attempts to enter the truck restriction zone without authorization. It is generally:",
+a:["Authorized if driver has business nearby","Unauthorized and may be cited/diverted","Allowed if under two axles","Allowed if lights are on"],
+c:1,
+e:"Commercial vehicles/trucks over 1.25 tons are unauthorized unless exception applies."
+},
+{
+q:"A contracted public transit bus approaches TIMP with a route number and MTA magnet. What is true?",
+a:["It is always unauthorized","It is authorized but must stop and speak with TIMP personnel","It must be diverted without inspection","It is treated as a breach"],
+c:1,
+e:"Contracted public transit buses are authorized but required to stop and speak with TIMP personnel."
+},
+{
+q:"At TIMP, the driver refuses consent for an administrative search. What should officers do?",
+a:["Search anyway because TIMP is administrative","Divert the vehicle and relay description/tag","Deploy barriers automatically","Arrest for refusal"],
+c:1,
+e:"If no consent, the vehicle is diverted and information relayed."
+},
+{
+q:"Condition Blue at TIMP generally occurs when:",
+a:["All barricades are raised","Unauthorized Vehicle or Vehicle of Interest enters Signal Activation Zone","A vehicle displays malicious intent","The checkpoint is normal"],
+c:1,
+e:"Condition Blue begins when a UV/VOI enters the Signal Activation Zone."
+},
+{
+q:"Condition Yellow generally involves:",
+a:["Normal checkpoint operations","Perceived threat entering restricted streets and individual barricade deployment after traffic is stopped","Emergency-up barrier deployment for malicious intent","Accidental unauthorized access only"],
+c:1,
+e:"Condition Yellow is a perceived threat entering restricted streets; barricades are raised individually once traffic is stopped and clear."
+},
+{
+q:"Condition Red barrier deployment is best compared to:",
+a:["A routine traffic control measure","A warning NOI","Use of lethal force under totality of circumstances","A parking enforcement action"],
+c:2,
+e:"Condition Red barrier deployment is treated like lethal force and requires totality of circumstances."
+},
+{
+q:"A vehicle simply runs a red traffic signal near TIMP. Which is true?",
+a:["That alone justifies barrier deployment","That alone does not justify barrier deployment","It is always a breach","It requires no enforcement"],
+c:1,
+e:"Running a red light alone does not justify deploying barriers."
+},
+{
+q:"Unauthorized Access at TIMP means:",
+a:["Intentional overt bypass of security","Error by officer, driver, or both causing unauthorized entry","Any vehicle larger than 1.25 tons","A confirmed 10-100"],
+c:1,
+e:"Unauthorized Access is generally due to error and treated as a standard traffic stop after pushing out of the perimeter."
+},
+{
+q:"A Breach at TIMP is best described as:",
+a:["An unintentional lane mistake","A vehicle intentionally bypassing security in an overt manner","A driver refusing a consent search","A public bus missing its route number"],
+c:1,
+e:"A breach is intentional and is treated as high-risk."
+},
+{
+q:"An AMR ambulance is approaching the Hill. What is correct?",
+a:["AMR is allowed access","All contract ambulances are barred","AMR must always be diverted","AMR is treated as a tour bus"],
+c:0,
+e:"AMR emergency vehicles are allowed access to the Hill."
+},
+{
+q:"A non-AMR private ambulance attempts to traverse the Hill with emergency lights activated. What is correct?",
+a:["Allowed because emergency lights are active","Not allowed to traverse through the Hill","Allowed if driver requests permission after entry","Automatically Condition Red"],
+c:1,
+e:"Other emergency vehicle contract companies are not allowed to traverse the Hill, lights or not."
+},
+{
+q:"A driver knowingly refuses to stop after a lawful signal but does not drive recklessly and causes no damage. Charge level?",
+a:["Felony fleeing","Misdemeanor fleeing","Only civil infraction","No violation unless pursuit occurs"],
+c:1,
+e:"Knowingly failing/refusing to stop is misdemeanor fleeing unless reckless driving/property damage/injury elevates it."
+},
+{
+q:"A fleeing driver knowingly refuses to stop and drives in a manner constituting reckless driving. Charge level?",
+a:["Misdemeanor only","Felony","Parking violation","NOI only"],
+c:1,
+e:"Fleeing plus reckless driving, property damage, or injury is felony fleeing."
+},
+{
+q:"Members of Congress going to or from session are:",
+a:["Immune from arrest","Subject to arrest like everyone else","Only subject to civil enforcement","Never issued NOIs"],
+c:1,
+e:"Williamson: Members have no immunity from arrest in criminal matters."
+},
+{
+q:"A Member going to session is known to the officer and can be served later at a Capitol Grounds location. For an NOI, the officer:",
+a:["Must detain immediately","Does not need to detain to issue the NOI","Cannot issue the NOI at all","Must arrest first"],
+c:1,
+e:"A Member does not need to be detained for an NOI if conditions for later service are met."
+},
+{
+q:"A driver is stopped for texting while driving. Which act is included in texting?",
+a:["Only sending a typed message","Composing, sending, receiving, or reading a text-based message","Only reading email","Only using social media"],
+c:1,
+e:"Texting includes composing, sending, receiving, or reading text-based communications."
+},
+{
+q:"Who may not use even a hands-free device?",
+a:["School bus drivers and learner’s permit operators","Only taxi drivers","Only emergency vehicle operators","All private drivers"],
+c:0,
+e:"School bus drivers and learner permit operators may not use even hands-free devices."
+},
+{
+q:"A taxicab operator asks the destination before the passenger enters. This is:",
+a:["Allowed for safety","Improper because destination cannot be asked until passenger is inside","Required before service","Allowed only after 1800"],
+c:1,
+e:"Taxi operators cannot ask destination until the passenger is in the taxicab."
+},
+{
+q:"A fare dispute becomes criminal when:",
+a:["The passenger disagrees with the amount","The passenger refuses to pay after demand in officer’s presence","The driver asks for prepayment","The passenger exits the cab"],
+c:1,
+e:"Fare disputes are civil unless the passenger refuses to pay after demand; then Theft II may apply."
+},
+{
+q:"For a traffic stop, Communications should be notified in which general order after acknowledgement?",
+a:["Tag, occupants, location, weather","Location, tag, color/make/model, occupants, solo/other unit","Occupants, driver name, tag, location","Violation, driver name, VIN, insurance"],
+c:1,
+e:"The required order is location, tag, color/make/model, occupants, and whether solo or with another unit."
+},
+{
+q:"During a vehicle approach, the officer should generally avoid positioning themselves:",
+a:["Near the rear of the vehicle","Past the rear of the front door","On the passenger side","Near the trunk"],
+c:1,
+e:"Do not position yourself past the rear of the front door."
+},
+{
+q:"When issuing an NOI, a violator refuses to sign. What should the officer do?",
+a:["Void the NOI","Write REFUSED, date it, and give Copy C","Arrest for refusal","Keep all copies"],
+c:1,
+e:"Refusal to sign does not void the NOI; write REFUSED, date it, and give Copy C."
+},
+{
+q:"An NOI written in error is discovered after the officer has left the scene. Correct action?",
+a:["Destroy all copies","Report issue to supervisor and complete CP-320","Ignore because it was already served","Write VOID diagonally only"],
+c:1,
+e:"After leaving the scene, notify supervisor and complete CP-320."
+},
+{
+q:"A spoiled or defaced NOI set should be:",
+a:["Thrown away","Voided and turned in with CP-564","Given to violator anyway","Kept until end of month"],
+c:1,
+e:"Spoiled/defaced NOIs are voided and turned in with CP-564."
+},
+{
+q:"Code 1 response requires:",
+a:["No emergency equipment if traffic is light","Full emergency equipment and headlights activated","Only lights, no siren","Only siren, no lights"],
+c:1,
+e:"Code 1 uses full emergency equipment plus headlights."
+},
+{
+q:"Authorization to operate Code 1:",
+a:["Automatically authorizes vehicle pursuit","Does not alone authorize pursuit","Means the officer may disregard all safety rules","Applies to all USCP vehicles"],
+c:1,
+e:"Code 1 authorization does not by itself allow a pursuit."
+},
+{
+q:"A vehicular pursuit may be initiated for:",
+a:["Traffic violations","Misdemeanors","Violent felony involving serious threat and immediate danger if delay occurs","Any felony"],
+c:2,
+e:"USCP vehicle pursuits are limited to violent felonies involving serious threat/death/serious bodily injury and immediate danger."
+},
+{
+q:"During a pursuit, a member facing a red signal must:",
+a:["Proceed without slowing if siren is active","Stop before entering the intersection","Slow to maximum legal speed only","Use opposing traffic lanes automatically"],
+c:1,
+e:"Policy requires stopping before entering an intersection on red."
+},
+{
+q:"Which tactic is prohibited during a pursuit?",
+a:["Using emergency lights","Traveling left lane and passing left when possible","Boxing in a moving pursued vehicle","Providing radio updates"],
+c:2,
+e:"Boxing in, ramming, PIT, roadblocks, stop sticks, and deliberate contact are prohibited."
+},
+{
+q:"Fresh pursuit into a residence allows officers to:",
+a:["Search the entire house for evidence","Enter for felonies only and search areas where the subject may hide","Enter for any misdemeanor","Continue searching after the subject is found"],
+c:1,
+e:"Residence entry is for felonies only; search areas where subject may hide and stop once found."
+}
+];
+
+const form = document.getElementById("quiz");
+
+questions.forEach((item, i) => {
+  const div = document.createElement("div");
+  div.className = "q";
+  div.innerHTML = `<h3>${i+1}. ${item.q}</h3>`;
+  item.a.forEach((choice, j) => {
+    div.innerHTML += `
+      <label>
+        <input type="radio" name="q${i}" value="${j}">
+        ${String.fromCharCode(65+j)}. ${choice}
+      </label>`;
+  });
+  div.innerHTML += `<div id="exp${i}" class="explain"></div>`;
+  form.appendChild(div);
+});
+
+function gradeQuiz(){
+  let score = 0;
+  questions.forEach((item, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    const exp = document.getElementById(`exp${i}`);
+    exp.style.display = "block";
+
+    if(selected && Number(selected.value) === item.c){
+      score++;
+      exp.className = "explain correct";
+      exp.innerHTML = `Correct. ${item.e}`;
+    } else {
+      exp.className = "explain wrong";
+      exp.innerHTML = `Incorrect. Correct answer: ${String.fromCharCode(65+item.c)}. ${item.a[item.c]}<br>${item.e}`;
+    }
+  });
+
+  const percent = Math.round((score / questions.length) * 100);
+  document.getElementById("score").innerHTML = `Score: ${score}/50 (${percent}%)`;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+</script>
+</div>
+</body>
+</html>
